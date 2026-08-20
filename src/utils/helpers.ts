@@ -26,7 +26,7 @@ export function formatCurrency(amount: number): string {
   return `$${formatted}`;
 }
 
-export function getInitialMonthData(year: number, month: number, populateSample = true): MonthData {
+export function getInitialMonthData(year: number, month: number, populateSample = false): MonthData {
   const dailyHabits: DailyHabit[] = DEFAULT_DAILY_HABITS.map(dh => {
     const days: { [day: number]: boolean } = {};
     if (populateSample && SAMPLE_POPULATED_DAYS[dh.id]) {

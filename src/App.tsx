@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import TrialPage from './components/TrialPage';
 import { DailyHabit, WeeklyHabit, MonthData, HabitTemplate, UserProfile } from './types';
 import { 
   getInitialMonthData, 
@@ -34,6 +35,16 @@ export default function App() {
 
   // Opening Splash / Screensaver State
   const [showSplash, setShowSplash] = useState<boolean>(true);
+
+  // 3-Day Free Trial / Paywall State
+  const [showTrial, setShowTrial] = useState<boolean>(() => {
+    return localStorage.getItem('fx_trial_seen') !== 'true';
+  });
+
+  const handleTrialContinue = () => {
+    localStorage.setItem('fx_trial_seen', 'true');
+    setShowTrial(false);
+  };
 
   // Theme Mode strictly locked to dark mode per user request
   const [theme] = useState<'dark'>('dark');
@@ -390,6 +401,11 @@ export default function App() {
           theme={theme} 
         />
       )}
+
+        {/* 3-Day Free Trial Paywall */}
+        {!showSplash && showTrial && (
+          <TrialPage onContinue={handleTrialContinue} />
+        )}
 
       {/* Top Masthead & Controls */}
       <Header
