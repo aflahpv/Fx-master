@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Fx-master</string>
+    <string name="title_activity_main">Fx-master</string>
+    <string name="package_name">com.aflahpv.fxmaster</string>
+    <string name="custom_url_scheme">com.aflahpv.fxmaster</string>
+</resources>
