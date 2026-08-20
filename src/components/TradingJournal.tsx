@@ -129,7 +129,7 @@ export const TradingJournal: React.FC<TradingJournalProps> = ({
       console.error('Failed to load journals', e);
     }
     // Initialize with comprehensive multi-day sample showing green (profit), red (loss), and breakeven
-    return getInitialSampleJournals();
+    return {};
   });
 
   // Toggle calendar view

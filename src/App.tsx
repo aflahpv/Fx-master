@@ -81,7 +81,7 @@ export default function App() {
     } catch {
       // ignore
     }
-    return getInitialMonthData(year, month, true);
+    return getInitialMonthData(year, month, false);
   });
 
   // Highlight specific habit row when clicked from gauge
@@ -121,7 +121,7 @@ export default function App() {
     } catch {
       // ignore
     }
-    setMonthData(getInitialMonthData(newYear, newMonth, true));
+    setMonthData(getInitialMonthData(newYear, newMonth, false));
   };
 
   // Toggle Daily Checkbox
@@ -271,7 +271,7 @@ export default function App() {
 
   // Load PDF Sample Data
   const handleLoadSample = () => {
-    setMonthData(getInitialMonthData(year, month, true));
+    setMonthData(getInitialMonthData(year, month, false));
     triggerCelebration();
   };
 
