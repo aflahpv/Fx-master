@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TrialPage from './components/TrialPage';
+import { watchSubscriptionStatus } from './firebase';
+import { isTrialExpired, getSavedPaymentEmail, emailToDocId } from './utils/trial';
 import { DailyHabit, WeeklyHabit, MonthData, HabitTemplate, UserProfile } from './types';
 import { 
   getInitialMonthData, 
@@ -37,12 +39,31 @@ export default function App() {
   const [showSplash, setShowSplash] = useState<boolean>(true);
 
   // 3-Day Free Trial / Paywall State
-  const [showTrial, setShowTrial] = useState<boolean>(() => {
-    return localStorage.getItem('fx_trial_seen') !== 'true';
-  });
+  const [subscriptionActive, setSubscriptionActive] = useState<boolean>(false);
+  const [checkingSubscription, setCheckingSubscription] = useState<boolean>(true);
+  const [showTrial, setShowTrial] = useState<boolean>(false);
+
+  useEffect(() => {
+    const email = getSavedPaymentEmail();
+    if (!email) {
+      setCheckingSubscription(false);
+      setShowTrial(isTrialExpired() ? true : false);
+      return;
+    }
+    const docId = emailToDocId(email);
+    const unsubscribe = watchSubscriptionStatus(docId, (status) => {
+      setSubscriptionActive(status.active);
+      setCheckingSubscription(false);
+      if (!status.active && isTrialExpired()) {
+        setShowTrial(true);
+      } else {
+        setShowTrial(false);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   const handleTrialContinue = () => {
-    localStorage.setItem('fx_trial_seen', 'true');
     setShowTrial(false);
   };
 
@@ -404,7 +425,7 @@ export default function App() {
 
         {/* 3-Day Free Trial Paywall */}
         {!showSplash && showTrial && (
-          <TrialPage onContinue={handleTrialContinue} />
+          <TrialPage onContinue={handleTrialContinue} mandatory={isTrialExpired() && !subscriptionActive} />
         )}
 
       {/* Top Masthead & Controls */}
