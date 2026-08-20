@@ -24,12 +24,8 @@ jobs:
       - name: Build React Application
         run: npm run build
 
-      - name: Install Capacitor Platforms
+      - name: Add Android Platform
         run: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android --legacy-peer-deps
-          if [ ! -f capacitor.config.json ]; then
-            npx cap init "FX MASTER" "com.pv.fxmaster" --web-dir=dist
-          fi
           if [ ! -d android ]; then
             npx cap add android
           fi
